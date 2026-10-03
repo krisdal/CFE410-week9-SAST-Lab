@@ -1,0 +1,29 @@
+rules:
+  - id: cbe410-hardcoded-jwt-secret
+    languages: [javascript]
+    severity: ERROR
+    message: Hard-coded JWT secret; load secrets from a protected configuration source.
+    pattern: const JWT_SECRET = $VALUE
+
+  - id: cbe410-dangerous-eval
+    languages: [javascript]
+    severity: ERROR
+    message: Avoid eval(); untrusted expressions can become code execution.
+    pattern: eval(...)
+
+  - id: cbe410-md5-hash
+    languages: [javascript]
+    severity: WARNING
+    message: MD5 is unsuitable for password hashing.
+    pattern: crypto.createHash('md5')
+
+  - id: cbe410-command-injection
+    languages: [javascript]
+    severity: ERROR
+    message: User-controlled HTTP input may reach child_process.exec().
+    mode: taint
+    pattern-sources:
+      - pattern: req.query.$FIELD
+      - pattern: req.body.$FIELD
+    pattern-sinks:
+      - pattern: exec(...)
